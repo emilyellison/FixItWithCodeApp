@@ -28,7 +28,7 @@
     
     element = elementName;
     
-    if ([element isEqualToString:@"item"]) {
+    if ([element isEqualToString:@"entry"]) {
         
         item    = [[NSMutableDictionary alloc] init];
         title   = [[NSMutableString alloc] init];
@@ -42,7 +42,7 @@
     
     if ([element isEqualToString:@"title"]) {
         [title appendString:string];
-    } else if ([element isEqualToString:@"link"]) {
+    } else if ([element isEqualToString:@"url"]) {
         [link appendString:string];
     }
     
@@ -50,11 +50,10 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     
-    if ([elementName isEqualToString:@"item"]) {
+    if ([elementName isEqualToString:@"entry"]) {
         
         [item setObject:title forKey:@"title"];
-        [item setObject:link forKey:@"link"];
-        
+        [item setObject:link forKey:@"url"];
         [feeds addObject:[item copy]];
         
     }
@@ -109,28 +108,14 @@
     return cell;
 }
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
+        
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = _objects[indexPath.row];
-        [[segue destinationViewController] setDetailItem:object];
+        NSString *string = [feeds[indexPath.row] objectForKey: @"url"];
+        [[segue destinationViewController] setUrl:string];
+        
     }
 }
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FCMasterViewController : UITableViewController
+@interface FCMasterViewController : UITableViewController <NSXMLParserDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
